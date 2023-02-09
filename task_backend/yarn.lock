@@ -53,6 +53,13 @@
     picomatch "^2.3.1"
     slash "^3.0.0"
 
+"@adonisjs/attachment-lite@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/@adonisjs/attachment-lite/-/attachment-lite-1.0.7.tgz"
+  integrity sha512-LIMVQ1ejrsDfzUAWwhL7W8GnWBFkEn9SvnY8Q8FnTihYD+Mjt3TO7Nxt5JhO3ZtuuvzcJMQUrH6xjYC4p/Yb8Q==
+  dependencies:
+    "@poppinss/utils" "^4.0.4"
+
 "@adonisjs/auth@^8.2.3":
   version "8.2.3"
   resolved "https://registry.npmjs.org/@adonisjs/auth/-/auth-8.2.3.tgz"
@@ -84,7 +91,7 @@
   dependencies:
     "@poppinss/utils" "^5.0.0"
 
-"@adonisjs/core@^5.0.0", "@adonisjs/core@^5.1.0", "@adonisjs/core@^5.7.1", "@adonisjs/core@^5.8.0":
+"@adonisjs/core@^5.0.0", "@adonisjs/core@^5.1.0", "@adonisjs/core@^5.3.0", "@adonisjs/core@^5.7.1", "@adonisjs/core@^5.8.0":
   version "5.9.0"
   resolved "https://registry.npmjs.org/@adonisjs/core/-/core-5.9.0.tgz"
   integrity sha512-32zG9EW0t0Ck0cMzlwD0+z3GJG7k/gZz6P0+h+s8N1N7fHxGixrKs7W7lT3OcIvk0NsuIw1tUPAU7fAWytHEqA==
@@ -200,7 +207,7 @@
     abstract-logging "^2.0.1"
     pino "^6.14.0"
 
-"@adonisjs/lucid@^18.0.0", "@adonisjs/lucid@^18.3.0":
+"@adonisjs/lucid@^17.0.0 || ^18.0.0", "@adonisjs/lucid@^18.0.0", "@adonisjs/lucid@^18.3.0":
   version "18.3.0"
   resolved "https://registry.npmjs.org/@adonisjs/lucid/-/lucid-18.3.0.tgz"
   integrity sha512-EgLgwP/VkTdOjA4MvnXjZmXGJl1qQVpGe4D/bCZqyO4859LZ/kHZ5a4VXe5+b2Nk4QDWF8uYq0MbSMDGskZr1Q==
