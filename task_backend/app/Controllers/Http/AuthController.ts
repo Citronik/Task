@@ -19,6 +19,7 @@ export default class AuthController {
     console.log('login');
     const payload = await request.validate(LoginUser);
     const {username, email, password} = payload;
+    console.log(username, email, password);
     const token = !username ? await auth.attempt(email, password) : await auth.attempt(username, password);
     if (!token) {
       return response.status(404).json({
