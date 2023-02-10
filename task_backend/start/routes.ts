@@ -20,9 +20,27 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+Route.get('/', async () => {
+  return {}
+})
+
+
 Route.group(() =>{
-  //Route.get('/', 'Contrloller.empty');
-  Route.post('/auth/register', 'AuthController.register');
-  Route.post('/auth/login', 'AuthController.login');
-  Route.patch('/auth/update', 'AuthController.update').middleware('auth');
-}).prefix('/api')
+
+  Route.group(() =>{
+    Route.post('register', 'UsersController.register');
+    Route.post('login', 'UsersController.login');
+    Route.patch('update', 'UsersController.update').middleware('auth');
+    Route.get('me', 'UsersController.showMe').middleware('auth');
+    Route.get('', 'UsersController.getAllUsers');
+
+    Route.group(() =>{
+      Route.get('me', 'ProfilesController.showMyProfile').middleware('auth');
+      Route.patch('update', 'ProfilesController.update').middleware('auth');
+
+    }).prefix('profiles')
+
+  }).prefix('users')
+
+
+}).prefix('api')

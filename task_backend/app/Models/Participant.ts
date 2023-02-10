@@ -19,10 +19,4 @@ export default class Participant extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @manyToMany(() => User)
-  public projects: ManyToMany<typeof User>
-
-  @belongsTo(() => Room)
-  public author: BelongsTo<typeof Room>
-
 }

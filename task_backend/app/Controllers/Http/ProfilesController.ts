@@ -1,3 +1,79 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class ProfilesController {}
+import User from "App/Models/User";
+import Profile from "App/Models/Profile";
+import UpdateProfile from "App/Validators/UpdateProfileValidator";
+import UploadsController from "./UploadsController";
+
+export default class ProfilesController {
+  public async showMyProfile({ request, response, auth }){
+    console.log('showing profile');
+    const user = await User.find(auth.user.id);
+    if (!user) {
+      return response.status(404).json({
+          status: 'failed',
+          message: 'User not found'
+      })
+    }
+    const profile = await Profile.findBy('user_id', user.id);
+    if (!profile) {
+      return response.status(404).json({
+          status: 'failed',
+          message: 'User not found'
+      })
+    }
+    const payload = await request.validate(UpdateProfile);
+    profile.merge(payload);
+    return response.status(200).json({
+      status: 'success',
+      message: 'User profile',
+      data: profile.toJSON()
+    });
+  }
+
+  public async update({ request, response, auth }){
+    console.log('updating profile');
+    const user = await User.find(auth.user.id);
+    if (!user) {
+      return response.status(404).json({
+          status: 'failed',
+          message: 'User not found'
+      })
+    }
+    const profile = await Profile.findBy('user_id', user.id);
+    if (!profile) {
+      return response.status(404).json({
+          status: 'failed',
+          message: 'User not found'
+      })
+    }
+    const payload = await request.validate(UpdateProfile);
+    profile.bio = payload.bio;
+    if (request.hasOwnProperty('file')) {
+      const uploadController = new UploadsController();
+      const upload = await uploadController.upload(request, auth, response);
+      if (!upload) {
+        return response.status(404).json({
+          status: 'failed',
+          message: 'Upload file failed'
+      })
+      }
+      await profile.related('avatar').associate(upload);
+    }
+    try {
+      await profile.save();
+      return response.status(200).json({
+        status: 'success',
+        message: 'User profile',
+        data: profile.toJSON()
+      });
+    } catch (error) {
+      console.log('profile upload', error)
+      return response.status(200).json({
+        status: 'failed',
+        message: 'Profile failed',
+      });
+    }
+
+  }
+}

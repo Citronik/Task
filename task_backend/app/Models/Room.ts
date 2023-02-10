@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, hasMany, HasMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Participant from './Participant'
 import Message from './Message'
@@ -27,11 +27,27 @@ export default class Room extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    localKey: 'creator_id'
+  })
   public creator: BelongsTo<typeof User>
 
-  @hasOne(() => Participant)
-  public participants: HasOne<typeof Participant>
+  @manyToMany(() => Participant, {
+    pivotForeignKey: 'room_id',
+    pivotRelatedForeignKey: 'participant_id'
+  })
+  public participants: ManyToMany<typeof Participant>
+
+  @manyToMany(() => User, {
+    pivotForeignKey: 'room_id',
+    pivotRelatedForeignKey: 'participant_id',
+    pivotTable: 'participants',
+    pivotTimestamps: {
+      createdAt: 'createdAt',
+      updatedAt: false,
+    },
+  })
+  public rooms: ManyToMany<typeof User>
 
   @hasMany(() => Message)
   public messages: HasMany<typeof Message>
