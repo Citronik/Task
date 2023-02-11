@@ -40,6 +40,12 @@ Route.group(() =>{
 
     }).prefix('profiles')
 
+    Route.group(() =>{
+      Route.get('me', 'ProfilesController.showMyProfile').middleware('auth');
+      Route.patch('update', 'ProfilesController.update').middleware('auth');
+
+    }).prefix('rooms')
+
   }).prefix('users')
 
 
