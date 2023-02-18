@@ -4,6 +4,7 @@ import User from './User'
 import Participant from './Participant'
 import Message from './Message'
 import Task from './Task'
+import Upload from './Upload'
 
 export default class Room extends BaseModel {
   @column({ isPrimary: true })
@@ -19,7 +20,7 @@ export default class Room extends BaseModel {
   public room_table: string
 
   @column()
-  public photo_id: number
+  public photo_id: number | null
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
@@ -28,9 +29,16 @@ export default class Room extends BaseModel {
   public updatedAt: DateTime
 
   @belongsTo(() => User, {
-    localKey: 'creator_id'
+    localKey: 'id',
+    foreignKey: 'creator_id',
   })
   public creator: BelongsTo<typeof User>
+
+  @belongsTo(() => Upload, {
+    foreignKey: 'photo_id',
+    localKey: 'id'
+  })
+  public photo: BelongsTo<typeof Upload>
 
   @manyToMany(() => Participant, {
     pivotForeignKey: 'room_id',

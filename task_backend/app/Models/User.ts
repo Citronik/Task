@@ -41,6 +41,7 @@ export default class User extends BaseModel {
   public profile: HasOne<typeof Profile>
 
   @hasMany(() => Room, {
+    localKey: 'id',
     foreignKey: 'creator_id'
   })
   public room: HasMany<typeof Room>

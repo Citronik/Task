@@ -8,26 +8,26 @@ import UploadsController from "./UploadsController";
 export default class ProfilesController {
   public async showMyProfile({ request, response, auth }){
     console.log('showing profile');
-    const user = await User.find(auth.user.id);
+    const user = await User.findOrFail(auth.user.id);
     if (!user) {
       return response.status(404).json({
           status: 'failed',
           message: 'User not found'
       })
     }
-    const profile = await Profile.findBy('user_id', user.id);
-    if (!profile) {
+    await user.load('profile')
+    if (!user.profile) {
       return response.status(404).json({
           status: 'failed',
           message: 'User not found'
       })
     }
     const payload = await request.validate(UpdateProfile);
-    profile.merge(payload);
+    user.profile.merge(payload);
     return response.status(200).json({
       status: 'success',
       message: 'User profile',
-      data: profile.toJSON()
+      data: user.profile.toJSON()
     });
   }
 
@@ -49,7 +49,7 @@ export default class ProfilesController {
     }
     const payload = await request.validate(UpdateProfile);
     profile.bio = payload.bio;
-    if (request.hasOwnProperty('file')) {
+    if (request.file('file')) {
       const uploadController = new UploadsController();
       const upload = await uploadController.upload(request, auth, response);
       if (!upload) {
