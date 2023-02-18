@@ -51,7 +51,7 @@ export default class ProfilesController {
     profile.bio = payload.bio;
     if (request.file('file')) {
       const uploadController = new UploadsController();
-      const upload = await uploadController.upload(request, auth, response);
+      const upload = await uploadController.upload(request);
       if (!upload) {
         return response.status(404).json({
           status: 'failed',

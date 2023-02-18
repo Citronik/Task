@@ -14,16 +14,52 @@ export default class RoomsController {
     const room = new Room();
     room.merge(payload);
     await user.related('room').save(room);
-    console.log(request.file('file'));
     if (request.file('file')) {
       console.log('Uploading file');
       const uploadController = new UploadsController();
-      const upload = await uploadController.upload(request, auth, response);
+      const upload = await uploadController.upload(request);
       if (!upload) {
         return response.status(404).json({
           status: 'failed',
           message: 'Upload file failed'
-      })
+      });
+      }
+      await room.related('photo').associate(upload);
+    }
+    return room;
+  }
+
+  public async getAllMyRooms({ auth }) {
+    console.log('Create Room');
+    const user = await User.findOrFail(auth.user.id);
+    const rooms = await user.related('room').query();
+    return rooms;
+  }
+
+  public async getRoom({ params, bouncer }) {
+    console.log('Get a '+ params.id +' Room');
+    const room = await Room.findOrFail(params.id);
+    await bouncer.with('RoomPolicy').authorize('view', room);
+    return room;
+  }
+
+  public async update({ request, response, params, bouncer, auth }) {
+    console.log('Update a '+ params.id +' Room');
+    const user = await User.findOrFail(auth.user.id);
+    const room = await Room.findOrFail(params.id);
+    await bouncer.with('RoomPolicy').authorize('update', room);
+    const payload = await request.validate(CreateRoom);
+    room.merge(payload);
+    await user.related('room').save(room);
+    if (request.file('file')) {
+      console.log('Uploading file');
+      const uploadController = new UploadsController();
+      const upload = await uploadController.upload(request);
+      if (!upload) {
+        return response.status(404).json({
+          status: 'failed',
+          message: 'Upload file failed'
+      });
       }
       await room.related('photo').associate(upload);
     }

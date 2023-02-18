@@ -5,7 +5,7 @@ import Application from '@ioc:Adonis/Core/Application'
 import { Attachment } from "@ioc:Adonis/Addons/AttachmentLite";
 
 export default class UploadsController {
-  public async upload( request, auth, response ){
+  public async upload( request ){
     console.log('uploading file');
     const payload_file = await request.validate(UploadFile);
     const upload = new Upload();
