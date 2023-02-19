@@ -23,10 +23,16 @@ export default class Message extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
 
-  @belongsTo(() => Room)
+  @belongsTo(() => Room, {
+    foreignKey: 'room_id',
+    localKey: 'id'
+  })
   public room: BelongsTo<typeof Room>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    foreignKey: 'user_id',
+    localKey: 'id'
+  })
   public author: BelongsTo<typeof User>
 
 }

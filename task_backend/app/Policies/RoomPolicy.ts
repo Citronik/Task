@@ -13,7 +13,7 @@ export default class RoomPolicy extends BasePolicy {
     return user.id === room.creator_id;
   }
 
-	public async readMessages(user: User, room: Room) {
+	public async isParticipants(user: User, room: Room) {
      if (user.id === room.creator_id) {
        return true;
      }
