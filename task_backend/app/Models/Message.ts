@@ -4,6 +4,7 @@ import Room from './Room'
 import User from './User'
 
 export default class Message extends BaseModel {
+  public static table = 'room_messages';
   @column({ isPrimary: true })
   public id: number
 

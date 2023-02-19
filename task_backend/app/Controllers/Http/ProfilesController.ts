@@ -49,6 +49,7 @@ export default class ProfilesController {
     }
     const payload = await request.validate(UpdateProfile);
     profile.bio = payload.bio;
+    console.log(request.file('file'));
     if (request.file('file')) {
       const uploadController = new UploadsController();
       const upload = await uploadController.upload(request);

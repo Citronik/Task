@@ -6,6 +6,7 @@ import User from './User'
 
 
 export default class Task extends BaseModel {
+  public static table = 'room_tasks';
   @column({ isPrimary: true })
   public id: number
 

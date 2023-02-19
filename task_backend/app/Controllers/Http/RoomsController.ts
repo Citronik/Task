@@ -1,6 +1,8 @@
 // import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
+import Message from "App/Models/Message";
 import Room from "App/Models/Room";
+import Task from "App/Models/Task";
 import User from "App/Models/User";
 import CreateRoom from "App/Validators/Room/CreateRoomValidator";
 import UploadsController from "./UploadsController";
@@ -63,6 +65,16 @@ export default class RoomsController {
       }
       await room.related('photo').associate(upload);
     }
+    return room;
+  }
+
+  public async delete({ params, bouncer }) {
+    console.log('Delete a '+ params.id +' Room');
+    const room = await Room.findOrFail(params.id);
+    await bouncer.with('RoomPolicy').authorize('update', room);
+    //await Message.query().where('room_id', room.id).delete();
+    //await Task.query().where('room_id', room.id).delete();
+    await room.delete();
     return room;
   }
 
