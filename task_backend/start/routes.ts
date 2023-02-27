@@ -24,40 +24,39 @@ Route.get('/', async () => {
   return {}
 })
 
-
 Route.group(() =>{
-
   Route.group(() =>{
-    Route.post('register', 'UsersController.register');
-    Route.post('login', 'UsersController.login');
-    Route.get('logout', 'UsersController.logout').middleware('auth');     // to be done
-    Route.patch('update', 'UsersController.update').middleware('auth');
-    Route.get('me', 'UsersController.showMe').middleware('auth');
-    Route.get('', 'UsersController.getAllUsers');
+    Route.post('register', 'UsersController.register')
+    Route.post('login', 'UsersController.login')
+    Route.get('logout', 'UsersController.logout').middleware('auth') // to be done
+    Route.patch('update', 'UsersController.update').middleware('auth')
+    Route.get('me', 'UsersController.showMe').middleware('auth')
+    Route.get('', 'UsersController.getAllUsers')
 
     Route.group(() =>{
-      Route.get('me', 'ProfilesController.showMyProfile').middleware('auth');
-      Route.patch('update', 'ProfilesController.update').middleware('auth');
-
+      Route.get('me', 'ProfilesController.showMyProfile').middleware('auth')
+      Route.patch('update', 'ProfilesController.update').middleware('auth')
     }).prefix('profiles')
-
   }).prefix('users')
 
   Route.group(() =>{
-    Route.get('', 'RoomsController.getAllMyRooms').middleware('auth');    // done tested
-    Route.get(':id', 'RoomsController.getRoom').middleware('auth');       // done tested
-    Route.patch(':id', 'RoomsController.update').middleware('auth');      // done tested
-    Route.delete(':id', 'RoomsController.delete').middleware('auth');     // done ...
-    Route.post('create', 'RoomsController.create').middleware('auth');    // done tested
+    Route.get('', 'RoomsController.getAllMyRooms').middleware('auth') // done tested
+    Route.get(':id', 'RoomsController.getRoom').middleware('auth') // done tested
+    Route.patch(':id', 'RoomsController.update').middleware('auth') // done tested
+    Route.delete(':id', 'RoomsController.delete').middleware('auth') // done ...
+    Route.post('create', 'RoomsController.create').middleware('auth') // done tested
 
     //Route.get('', 'MessagesController.getAllMessages').middleware('auth');                        // to be done
-    Route.get(':id/messages', 'MessagesController.getRoomMessages').middleware('auth');             // done tested
-    Route.get(':id/messages/:msg_id', 'MessagesController.getRoomMessage').middleware('auth');         // to be done
-    Route.patch(':id/messages/:msg_id', 'MessagesController.update').middleware('auth');                // to be done
-    Route.delete(':id/messages/:msg_id', 'MessagesController.delete').middleware('auth');               // to be done
-    Route.post(':id/messages', 'MessagesController.create').middleware('auth');                     // to be done
+    Route.get(':id/messages', 'MessagesController.getRoomMessages').middleware('auth') // done tested
+    Route.get(':id/messages/:msg_id', 'MessagesController.getRoomMessage').middleware('auth') // done tested
+    Route.patch(':id/messages/:msg_id', 'MessagesController.update').middleware('auth') // to be done
+    Route.delete(':id/messages/:msg_id', 'MessagesController.delete').middleware('auth') // done tested
+    Route.post(':id/messages', 'MessagesController.create').middleware('auth') // done tested
 
-
+    Route.get(':id/tasks', 'TasksController.getRoomTasks').middleware('auth') // done not tested
+    Route.get(':id/tasks/:task_id', 'TasksController.getRoomTask').middleware('auth') // done not tested
+    Route.patch(':id/tasks/:task_id', 'TasksController.update').middleware('auth') // done not tested
+    Route.delete(':id/tasks/:task_id', 'TasksController.delete').middleware('auth') // done not tested
+    Route.post(':id/tasks', 'TasksController.create').middleware('auth') // done not tested
   }).prefix('rooms')
-
 }).prefix('api')

@@ -4,9 +4,8 @@ import TaskStatus from 'App/Enums/TaskStatus'
 import Room from './Room'
 import User from './User'
 
-
 export default class Task extends BaseModel {
-  public static table = 'room_tasks';
+  public static table = 'room_tasks'
   @column({ isPrimary: true })
   public id: number
 
@@ -36,5 +35,4 @@ export default class Task extends BaseModel {
 
   @belongsTo(() => User)
   public author: BelongsTo<typeof User>
-
 }
