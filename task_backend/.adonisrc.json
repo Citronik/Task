@@ -44,5 +44,15 @@
   },
   "testProviders": [
     "@japa/preset-adonis/TestsProvider"
+  ],
+  "metaFiles": [
+    {
+      "pattern": "public/**",
+      "reloadServer": false
+    },
+    {
+      "pattern": "scripts/*.sh",
+      "reloadServer": false
+    }
   ]
 }

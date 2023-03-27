@@ -1,0 +1,59 @@
+version: '3.8'
+
+volumes:
+  todo-mysql-data:
+networks:
+  todo-network:
+    driver: bridge
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    volumes:
+      - ./mysql/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "tcp://localhost:3306"]
+      interval: 300s
+      timeout: 400s
+      retries: 10
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: task_table
+      MYSQL_USER: ${MYSQL_USER_A}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+    expose:
+      - ${MYSQL_PORT}
+    restart: always
+    networks:
+      - todo-network
+    #command: --init-file ./mysql/data.sql:/docker-entrypoint-initdb.d/data.sql
+
+  task_backend_app:
+    container_name: task_backend_app
+    restart: always
+    depends_on:
+      - mysql
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./:/home/node/app
+    networks:
+      - todo-network
+    command: node ace serve --watch && dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
+
+
+
