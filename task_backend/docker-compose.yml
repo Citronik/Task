@@ -45,6 +45,11 @@ services:
       - ${PORT}:${PORT}
     env_file:
       - .env
+    healthcheck:
+      test: ["CMD", "curl", "-fk", "tcp://localhost:3333"]
+      interval: 300s
+      timeout: 400s
+      retries: 10
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: ${MYSQL_USER}
@@ -53,7 +58,7 @@ services:
       - ./:/home/node/app
     networks:
       - todo-network
-    command: node ace serve --watch && dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
+    #command: node ace migration:run && dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
 
 
 
