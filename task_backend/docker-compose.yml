@@ -1,64 +1,52 @@
-version: '3.8'
+version: "3.8"
 
 volumes:
-  todo-mysql-data:
+  task_database_data:
 networks:
-  todo-network:
+  task_network:
     driver: bridge
 
 services:
-  mysql:
-    container_name: mysql
+  task_database:
+    container_name: task_database
+    restart: always
     image: mysql:8.0
     volumes:
       - ./mysql/:/docker-entrypoint-initdb.d/
     healthcheck:
-      test: ["CMD", "curl", "-fk", "tcp://localhost:3306"]
-      interval: 300s
-      timeout: 400s
-      retries: 10
-    env_file:
-      - .env
+      test:
+        [
+          "CMD-SHELL",
+          "exit | mysql -h localhost -P 3306 -u root -p$$MYSQL_ROOT_PASSWORD",
+        ]
+      interval: 5s
+      timeout: 20s
+      retries: 30
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_DATABASE: task_table
-      MYSQL_USER: ${MYSQL_USER_A}
+      MYSQL_DATABASE: ${MYSQL_DB_NAME}
+      MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_PORT: ${MYSQL_PORT}
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
     expose:
       - ${MYSQL_PORT}
-    restart: always
     networks:
-      - todo-network
-    #command: --init-file ./mysql/data.sql:/docker-entrypoint-initdb.d/data.sql
+      - task_network
+    command: --init-file /docker-entrypoint-initdb.d/data.sql
 
   task_backend_app:
     container_name: task_backend_app
     restart: always
-    depends_on:
-      - mysql
     build:
       context: .
-      dockerfile: Dockerfile
+      target: dependencies
     ports:
       - ${PORT}:${PORT}
-    env_file:
-      - .env
-    healthcheck:
-      test: ["CMD", "curl", "-fk", "tcp://localhost:3333"]
-      interval: 300s
-      timeout: 400s
-      retries: 10
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      - 9229:9229
     volumes:
       - ./:/home/node/app
     networks:
-      - todo-network
-    #command: node ace migration:run && dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"
-
-
-
+      - task_network
+    command: dumb-init node ace serve --watch --node-args="--inspect=0.0.0.0"

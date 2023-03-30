@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 node ace migration:run --force
-node ace serve --watch
+dumb-init node server.js
