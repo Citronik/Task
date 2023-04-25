@@ -14,11 +14,9 @@ export const useUserStore = defineStore("user", {
     async fetchUser() {
       console.log('getting user');
       try {
-        //apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         const res = await apiClient.get('/users/me');
         this.user = res.data.data;
-        //localStorage.setItem('user', res.data.data);
-        //console.log(res);
         localStorage.setItem('userStore', JSON.stringify(this.$state));
         return this.user;
       } catch (error: any) {
@@ -41,6 +39,7 @@ export const useUserStore = defineStore("user", {
     },
     async signUp(user:JSON) {
       try {
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         const res = await apiClient.post('/users/register', user);
         this.user = res.data.user;
         //localStorage.setItem('token', res.data.token);
@@ -67,13 +66,19 @@ export const useUserStore = defineStore("user", {
     },
     async signOut() {
       console.log('logout');
-      this.user = null;
-      this.token = null;
-      const res = await apiClient.post('/users/login');
+      console.log(this.token);
+      const res = await apiClient.post('/users/logout', {
+        headers:{
+            'Authorization': `Bearer ${this.token}`
+        }
+    });
+      console.log(res);
       if (!this.err) {
         localStorage.removeItem('userStore');
         return true;
       }
+      this.user = null;
+      this.token = null;
       return false;
     },
     initialize() {

@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     async logout() {
+      console.log("logout");
       await this.userStore.signOut();
     },
   },

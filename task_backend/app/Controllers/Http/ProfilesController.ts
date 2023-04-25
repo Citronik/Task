@@ -23,7 +23,7 @@ export default class ProfilesController {
       })
     }
     await user.profile.load('avatar')
-    console.log(user.profile)
+    //console.log(user.profile)
     return response.status(200).json({
       status: 'success',
       message: 'User profile',
