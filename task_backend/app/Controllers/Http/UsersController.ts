@@ -8,18 +8,25 @@ import UpdateUser from 'App/Validators/UpdateUserValidator'
 export default class UsersController {
   public async register ({ request, response, auth }) {
     console.log('registration')
+    console.log(request)
     const payload = await request.validate(CreateUser)
     const user = await User.create(payload)
     const profile = await user.related('profile').create({})
-    return this.login(...arguments)
+    //return this.login(...arguments)
+    // return response.status(200).json({
+    //   status: 'success',
+    //   message: 'User logged in!',
+    //   user: user.toJSON(),
+    // })
   }
 
   public async login ({ request, response, auth }) {
     console.log('login')
     const payload = await request.validate(LoginUser)
-    const {username, email, password} = payload
+    const {username, email, password, rememberMeToken} = payload
     console.log(username, email, password)
     const token = !username ? await auth.attempt(email, password) : await auth.attempt(username, password)
+    //console.log(token)
     if (!token) {
       return response.status(404).json({
         status: 'failed',
@@ -79,7 +86,7 @@ export default class UsersController {
   }
 
   public async showMe ({ request, response, auth }) {
-    console.log('update')
+    console.log('showMe')
     const user = await User.find(auth.user.id)
     if (!user) {
       return response.status(404).json({

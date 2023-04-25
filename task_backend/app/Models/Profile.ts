@@ -23,13 +23,13 @@ export default class Profile extends BaseModel {
   public updatedAt: DateTime
 
   @belongsTo(() => User, {
-    localKey: 'user_id'
+    localKey: 'user_id',
   })
   public user: BelongsTo<typeof User>
 
   @belongsTo(() => Upload, {
     foreignKey: 'avatar_id',
-    localKey: 'id'
+    localKey: 'id',
   })
   public avatar: BelongsTo<typeof Upload>
 }

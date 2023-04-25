@@ -4,7 +4,7 @@ import Room from './Room'
 import User from './User'
 
 export default class Message extends BaseModel {
-  public static table = 'room_messages';
+  public static table = 'room_messages'
   @column({ isPrimary: true })
   public id: number
 
@@ -25,14 +25,13 @@ export default class Message extends BaseModel {
 
   @belongsTo(() => Room, {
     foreignKey: 'room_id',
-    localKey: 'id'
+    localKey: 'id',
   })
   public room: BelongsTo<typeof Room>
 
   @belongsTo(() => User, {
     foreignKey: 'user_id',
-    localKey: 'id'
+    localKey: 'id',
   })
   public author: BelongsTo<typeof User>
-
 }

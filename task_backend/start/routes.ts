@@ -28,7 +28,7 @@ Route.group(() =>{
   Route.group(() =>{
     Route.post('register', 'UsersController.register')
     Route.post('login', 'UsersController.login')
-    Route.get('logout', 'UsersController.logout').middleware('auth') // to be done
+    Route.post('logout', 'UsersController.logout').middleware('auth') // to be done
     Route.patch('update', 'UsersController.update').middleware('auth')
     Route.get('me', 'UsersController.showMe').middleware('auth')
     Route.get('', 'UsersController.getAllUsers')

@@ -3,7 +3,7 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 import {
   attachment,
-  AttachmentContract
+  AttachmentContract,
 } from '@ioc:Adonis/Addons/AttachmentLite'
 
 export default class Upload extends BaseModel {
@@ -18,5 +18,4 @@ export default class Upload extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
 }

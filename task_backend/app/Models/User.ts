@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasOne, HasOne, HasMany, hasMany, ManyToMany, manyToMany, afterCreate } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, hasOne, HasOne, HasMany, hasMany, ManyToMany, manyToMany,
+  afterCreate } from '@ioc:Adonis/Lucid/Orm'
 import Profile from './Profile'
 import Room from './Room'
 import Participant from './Participant'
@@ -36,13 +37,13 @@ export default class User extends BaseModel {
   public updatedAt: DateTime
 
   @hasOne(() => Profile, {
-    foreignKey: 'user_id'
+    foreignKey: 'user_id',
   })
   public profile: HasOne<typeof Profile>
 
   @hasMany(() => Room, {
     localKey: 'id',
-    foreignKey: 'creator_id'
+    foreignKey: 'creator_id',
   })
   public room: HasMany<typeof Room>
 

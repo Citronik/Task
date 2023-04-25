@@ -6,7 +6,7 @@ import UpdateProfile from 'App/Validators/UpdateProfileValidator'
 import UploadsController from './UploadsController'
 
 export default class ProfilesController {
-  public async showMyProfile ({ request, response, auth }){
+  public async showMyProfile ({ response, auth }){
     console.log('showing profile')
     const user = await User.findOrFail(auth.user.id)
     if (!user) {
@@ -22,12 +22,12 @@ export default class ProfilesController {
         message: 'User not found',
       })
     }
-    const payload = await request.validate(UpdateProfile)
-    user.profile.merge(payload)
+    await user.profile.load('avatar')
+    console.log(user.profile)
     return response.status(200).json({
       status: 'success',
       message: 'User profile',
-      data: user.profile.toJSON(),
+      data: user.profile,
     })
   }
 

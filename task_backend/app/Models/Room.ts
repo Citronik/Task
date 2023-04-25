@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, hasMany, HasMany, manyToMany,
+  ManyToMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Message from './Message'
 import Task from './Task'
@@ -38,29 +39,28 @@ export default class Room extends BaseModel {
 
   @belongsTo(() => Upload, {
     foreignKey: 'photo_id',
-    localKey: 'id'
+    localKey: 'id',
   })
   public photo: BelongsTo<typeof Upload>
 
   @manyToMany(() => User, {
     pivotTable: 'participants',
     pivotForeignKey: 'participant_id',
-    pivotRelatedForeignKey: 'room_id'
+    pivotRelatedForeignKey: 'room_id',
   })
   public participants: ManyToMany<typeof User>
 
   @hasMany(() => Message, {
     serializeAs: 'room_messages',
     localKey: 'id',
-    foreignKey: 'room_id'
+    foreignKey: 'room_id',
   })
   public messages: HasMany<typeof Message>
 
   @hasMany(() => Task, {
     serializeAs: 'room_tasks',
     localKey: 'id',
-    foreignKey: 'room_id'
+    foreignKey: 'room_id',
   })
   public tasks: HasMany<typeof Task>
-
 }
