@@ -9,8 +9,8 @@
         @click="rail = false"
       >
         <v-list-item
-          prepend-avatar="anonymous-avatar-icon-25.jpg"
-          :title="userStore.user?.username"
+          :prepend-avatar="avatar"
+          :title="username"
           nav
         >
           <template v-slot:append>
@@ -50,9 +50,14 @@ export default {
   data() {
     return {
       username: "",
+      avatar: "",
       drawer: true,
       rail: false,
     };
+  },
+  mounted() {
+    this.username = this.userStore.user?.username;
+    this.avatar = "http://127.0.0.1:3333/uploads/" + this.userStore.profile?.avatar.file.name;
   },
   methods: {
     async logout() {

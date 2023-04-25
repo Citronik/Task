@@ -74,14 +74,14 @@ import { useUserStore } from "../store/UserStore";
     }),
 
     methods: {
-      onSubmit () {
+      async onSubmit () {
         if (!this.loginForm) return
 
         this.loading = true
 
         setTimeout(() => (this.loading = false), 2000)
-        const res = this.login();
-        const profileRes = this.profile();
+        const res = await this.login();
+        const profileRes = await this.profile();
         if (!res.error && !profileRes.error) {
           this.$router.push("/");
         }
@@ -100,7 +100,6 @@ import { useUserStore } from "../store/UserStore";
       },
       async profile() {
         var res = await this.userStore.fetchProfile();
-
         return res;
       },
     },

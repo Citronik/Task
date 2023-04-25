@@ -14,10 +14,11 @@ export const useUserStore = defineStore("user", {
     async fetchUser() {
       console.log('getting user');
       try {
+        console.log(this.token);
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         const res = await apiClient.get('/users/me');
         this.user = res.data.data;
-        localStorage.setItem('userStore', JSON.stringify(this.$state));
+        //localStorage.setItem('userStore', JSON.stringify(this.$state));
         return this.user;
       } catch (error: any) {
         this.err = error.message;
@@ -26,7 +27,8 @@ export const useUserStore = defineStore("user", {
     async fetchProfile() {
       console.log('getting profile');
       try {
-        //apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        this.err = null;
+        apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         const res = await apiClient.get('/users/profiles/me');
         this.profile = res.data.data;
         //localStorage.setItem('user', res.data.data);
@@ -39,7 +41,7 @@ export const useUserStore = defineStore("user", {
     },
     async signUp(user:JSON) {
       try {
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        this.err = null;
         const res = await apiClient.post('/users/register', user);
         this.user = res.data.user;
         //localStorage.setItem('token', res.data.token);
@@ -51,14 +53,13 @@ export const useUserStore = defineStore("user", {
     },
     async signIn(credentials:JSON) {
       console.log('logging');
+      this.err = null;
       const res = await apiClient.post('/users/login', credentials);
-      //console.log(res);
       const data = res.data;
-      //console.log(data.data);
       if (data.data.token){
         console.log('token received');
         this.token = data.data.token;
-        apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
+        //apiClient.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
         localStorage.setItem('userStore', JSON.stringify(this.$state));
       }
       return await this.fetchUser();
@@ -66,12 +67,9 @@ export const useUserStore = defineStore("user", {
     },
     async signOut() {
       console.log('logout');
-      console.log(this.token);
-      const res = await apiClient.post('/users/logout', {
-        headers:{
-            'Authorization': `Bearer ${this.token}`
-        }
-    });
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ` + this.token;
+      this.err = null;
+      const res = await apiClient.post('/users/logout');
       console.log(res);
       if (!this.err) {
         localStorage.removeItem('userStore');
@@ -79,6 +77,7 @@ export const useUserStore = defineStore("user", {
       }
       this.user = null;
       this.token = null;
+      this.profile = null;
       return false;
     },
     initialize() {

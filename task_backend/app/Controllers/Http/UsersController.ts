@@ -103,6 +103,7 @@ export default class UsersController {
   }
 
   public async logout ({ auth, response }) {
+    console.log('logout')
     await auth.use('api').logout()
     response.status(200).redirect('/api/users/login')
   }

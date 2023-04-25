@@ -1,19 +1,13 @@
 <template>
   <v-toolbar app dark fixed id="toolbar">
-    <router-link class="custom-link-style" to="/">
+    <router-link id="name" class="custom-link-style" to="/">
       <v-toolbar-title class="mr-4">PLATEFORM</v-toolbar-title>
     </router-link>
     <v-toolbar-items>
-      <v-btn flat v-if="userStore.isLoggedIn">
-        <router-link class="custom-link-style" to="/Projects">
-          <v-icon class="mr-2">playlist_add_check</v-icon>
-          Projects
-      </router-link>
-      </v-btn>
     </v-toolbar-items>
     <v-spacer></v-spacer>
-    <TheSearchBar />
     <v-toolbar-items class="hidden-sm-and-down">
+      <TheSearchBar />
       <v-btn :key="register" :to="register" v-if="!userStore.isLoggedIn">
         <router-link class="custom-link-style" to="/register">
           <v-icon class="mr-2">account_box</v-icon>
@@ -59,6 +53,7 @@ export default {
     async logout() {
       console.log("logout");
       await this.userStore.signOut();
+      this.$router.push("/login");
     },
   },
 };
@@ -74,6 +69,8 @@ export default {
   color: #fff;
   text-decoration: wavy;
 }
-
+.mr-4 {
+  padding-left: 1rem !important;
+}
 
 </style>
